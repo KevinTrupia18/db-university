@@ -1,0 +1,60 @@
+
+-- 1. Studenti iscritti al Corso di Laurea in Economia
+
+SELECT s.*
+FROM students s
+JOIN degrees d ON s.degree_id = d.id
+WHERE d.name = 'Corso di Laurea in Economia';
+
+
+-- 2. Corsi di Laurea Magistrale del Dipartimento di Neuroscienze
+
+SELECT d.*
+FROM degrees d
+JOIN departments dep ON d.department_id = dep.id
+WHERE d.level = 'magistrale'
+AND dep.name = 'Dipartimento di Neuroscienze';
+
+
+-- 3. Tutti i corsi in cui insegna Fulvio Amato (ID = 44)
+
+SELECT c.*
+FROM courses c
+JOIN course_teacher ct ON c.id = ct.course_id
+WHERE ct.teacher_id = 44;
+
+
+-- 4. Studenti con Corso di Laurea e Dipartimento (ordine alfabetico)
+
+SELECT s.surname, 
+       s.name, 
+       d.name AS degree, 
+       dep.name AS department
+FROM students s
+JOIN degrees d ON s.degree_id = d.id
+JOIN departments dep ON d.department_id = dep.id
+ORDER BY s.surname ASC, s.name ASC;
+
+
+-- 5. Corsi di laurea con relativi corsi e insegnanti
+
+SELECT d.name AS degree,
+       c.name AS course,
+       t.surname,
+       t.name
+FROM degrees d
+JOIN courses c ON d.id = c.degree_id
+JOIN course_teacher ct ON c.id = ct.course_id
+JOIN teachers t ON ct.teacher_id = t.id;
+
+
+-- 6. Docenti che insegnano nel Dipartimento di Matematica
+
+SELECT DISTINCT t.surname,
+                t.name
+FROM teachers t
+JOIN course_teacher ct ON t.id = ct.teacher_id
+JOIN courses c ON ct.course_id = c.id
+JOIN degrees d ON c.degree_id = d.id
+JOIN departments dep ON d.department_id = dep.id
+WHERE dep.name = 'Dipartimento di Matematica';
